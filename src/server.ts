@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server-express';
-import * as Express from 'express';
+import Express from 'express';
 import { buildSchema } from 'type-graphql';
 import { DataSource } from 'typeorm';
 import { RegisterResolver } from './modules/user/register';
@@ -10,7 +10,9 @@ const run = async () => {
 	await myDataSource.initialize();
 
 	const schema = await buildSchema({ resolvers: [RegisterResolver] });
-	const apolloServer = new ApolloServer({ schema });
+	const apolloServer = new ApolloServer({
+		schema,
+	});
 
 	const app = Express();
 

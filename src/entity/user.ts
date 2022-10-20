@@ -21,7 +21,9 @@ export class User extends BaseEntity {
 	email: string;
 
 	@Field()
-	name: string;
+	name(): string {
+		return `${this.firstName} ${this.lastName}`;
+	}
 
 	@Column()
 	password: string;
