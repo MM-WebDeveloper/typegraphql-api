@@ -8,15 +8,20 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { redis } from './redis';
 import cors from 'cors';
+import { LoginResolver } from './modules/user/login';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
 const run = async () => {
 	const myDataSource = new DataSource(require('../ormconfig.json'));
 	await myDataSource.initialize();
 
-	const schema = await buildSchema({ resolvers: [RegisterResolver] });
+	const schema = await buildSchema({
+		resolvers: [RegisterResolver, LoginResolver],
+	});
 	const apolloServer = new ApolloServer({
 		schema,
 		context: (req) => ({ req }),
+		plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
 	});
 
 	const app = Express();
@@ -26,7 +31,7 @@ const run = async () => {
 	app.use(
 		cors({
 			credentials: true,
-			origin: 'http://localhost:3000',
+			// origin: 'http://localhost:3000',
 		})
 	);
 
